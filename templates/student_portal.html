@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+{% block title %}Student Portal{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="https://cdn.datatables.net/2.0.8/css/dataTables.bootstrap5.css">
+{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="h3 mb-0">Course Catalog</h1>
+    <a href="{{ url_for('my_schedule') }}" class="btn btn-outline-primary">My Schedule</a>
+</div>
+
+<div class="card border-0 shadow-sm mb-4">
+    <div class="card-body">
+        <form method="get" class="row g-3 align-items-end">
+            <div class="col-md-4">
+                <label class="form-label">Department</label>
+                <select class="form-select" name="department" id="departmentFilter">
+                    <option value="">All Departments</option>
+                    {% for dept in departments %}
+                    <option value="{{ dept }}" {% if selected_department == dept %}selected{% endif %}>{{ dept }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Credits</label>
+                <select class="form-select" name="credits" id="creditsFilter">
+                    <option value="">All Credits</option>
+                    {% for c in credits_options %}
+                    <option value="{{ c }}" {% if selected_credits == (c|string) %}selected{% endif %}>{{ c }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-4 d-flex gap-2">
+                <button class="btn btn-primary">Search</button>
+                <a href="{{ url_for('student_portal') }}" class="btn btn-outline-secondary">Reset</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="card border-0 shadow-sm">
+    <div class="card-body">
+        <table id="coursesTable" class="table table-striped align-middle">
+            <thead>
+                <tr>
+                    <th>Code</th>
+                    <th>Course Name</th>
+                    <th>Instructor</th>
+                    <th>Department</th>
+                    <th>Credits</th>
+                    <th>Seats</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for course in courses %}
+                <tr>
+                    <td>{{ course.course_code }}</td>
+                    <td>{{ course.course_name }}</td>
+                    <td>{{ course.instructor }}</td>
+                    <td>{{ course.department }}</td>
+                    <td>{{ course.credits }}</td>
+                    <td>{{ course.enrolled_count }} / {{ course.capacity }}</td>
+                    <td>
+                        {% if course.id in enrolled_course_ids %}
+                            <span class="badge text-bg-success">Enrolled</span>
+                        {% elif course.enrolled_count >= course.capacity %}
+                            <span class="badge text-bg-secondary">Full</span>
+                        {% else %}
+                            <form method="post" action="{{ url_for('enroll', course_id=course.id) }}">
+                                <button class="btn btn-sm btn-primary">Enroll</button>
+                            </form>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="7" class="text-center text-secondary py-4">No courses match your criteria.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://cdn.datatables.net/2.0.8/js/dataTables.js"></script>
+<script src="https://cdn.datatables.net/2.0.8/js/dataTables.bootstrap5.js"></script>
+<script>
+    const table = new DataTable('#coursesTable', {
+        pageLength: 8,
+        order: [[0, 'asc']]
+    });
+
+    $('#departmentFilter').on('change', function () {
+        table.column(3).search(this.value).draw();
+    });
+
+    $('#creditsFilter').on('change', function () {
+        table.column(4).search(this.value).draw();
+    });
+</script>
+{% endblock %}

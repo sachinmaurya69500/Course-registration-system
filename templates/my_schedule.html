@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% block title %}My Schedule{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="h3 mb-0">My Registered Courses</h1>
+    <a href="{{ url_for('student_portal') }}" class="btn btn-outline-secondary">Back to Catalog</a>
+</div>
+
+<div class="card border-0 shadow-sm">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table align-middle">
+                <thead>
+                    <tr>
+                        <th>Code</th>
+                        <th>Name</th>
+                        <th>Instructor</th>
+                        <th>Department</th>
+                        <th>Credits</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for course in courses %}
+                    <tr>
+                        <td>{{ course.course_code }}</td>
+                        <td>{{ course.course_name }}</td>
+                        <td>{{ course.instructor }}</td>
+                        <td>{{ course.department }}</td>
+                        <td>{{ course.credits }}</td>
+                        <td>
+                            <form method="post" action="{{ url_for('unenroll', course_id=course.id) }}">
+                                <button class="btn btn-sm btn-outline-danger">Unenroll</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="6" class="text-center text-secondary py-4">You have not enrolled in any courses.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

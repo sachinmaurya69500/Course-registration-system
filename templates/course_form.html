@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+{% block title %}{{ 'Create Course' if mode == 'create' else 'Edit Course' }}{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1 class="h3 mb-0">{{ 'Create New Course' if mode == 'create' else 'Edit Course' }}</h1>
+    <a class="btn btn-outline-secondary" href="{{ url_for('admin_dashboard') }}">Back</a>
+</div>
+
+<div class="card border-0 shadow-sm">
+    <div class="card-body p-4">
+        <form method="post" class="row g-3">
+            <div class="col-md-6">
+                <label class="form-label">Course Name</label>
+            <input name="course_name" class="form-control" aria-label="Course Name" value="{{ course.course_name or '' }}" required>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">Course Code</label>
+            <input name="course_code" class="form-control" aria-label="Course Code" value="{{ course.course_code or '' }}" required>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">Credits</label>
+            <input name="credits" type="number" min="1" class="form-control" aria-label="Credits" value="{{ course.credits or '' }}" required>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Instructor</label>
+            <input name="instructor" class="form-control" aria-label="Instructor" value="{{ course.instructor or '' }}" required>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">Department</label>
+            <input name="department" class="form-control" aria-label="Department" value="{{ course.department or '' }}" required>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">Capacity</label>
+            <input name="capacity" type="number" min="1" class="form-control" aria-label="Capacity" value="{{ course.capacity or '' }}" required>
+            </div>
+            <div class="col-12">
+                <button class="btn btn-primary">{{ 'Create Course' if mode == 'create' else 'Save Changes' }}</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+{% extends 'base.html' %}
+{% block title %}{% if mode == 'create' %}Create Course{% else %}Edit Course{% endif %} | Admin{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-lg-8">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h1 class="h3 fw-bold mb-0">{% if mode == 'create' %}Create Course{% else %}Edit Course{% endif %}</h1>
+      <a href="{{ url_for('admin_dashboard') }}" class="btn btn-outline-secondary">Back to Dashboard</a>
+    </div>
+
+    <div class="card shadow-soft border-0">
+      <div class="card-body p-4">
+        <form method="post" class="row g-3" novalidate>
+          <div class="col-md-6">
+            <label class="form-label" for="name">Course Name</label>
+            <input class="form-control" type="text" name="name" id="name" value="{{ course.name or '' }}" required>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label" for="code">Course Code</label>
+            <input class="form-control text-uppercase" type="text" name="code" id="code" value="{{ course.code or '' }}" required>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label" for="instructor">Instructor</label>
+            <input class="form-control" type="text" name="instructor" id="instructor" value="{{ course.instructor or '' }}" required>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label" for="department">Department</label>
+            <input class="form-control text-uppercase" type="text" name="department" id="department" value="{{ course.department or '' }}" required>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label" for="credits">Credits</label>
+            <input class="form-control" type="number" min="1" name="credits" id="credits" value="{{ course.credits or 3 }}" required>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label" for="capacity">Capacity</label>
+            <input class="form-control" type="number" min="1" name="capacity" id="capacity" value="{{ course.capacity or 30 }}" required>
+          </div>
+          <div class="col-12 d-flex gap-2">
+            <button class="btn btn-primary" type="submit">{% if mode == 'create' %}Create Course{% else %}Save Changes{% endif %}</button>
+            <a class="btn btn-light border" href="{{ url_for('admin_dashboard') }}">Cancel</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

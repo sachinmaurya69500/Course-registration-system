@@ -1,0 +1,35 @@
+:root {
+    --brand: #0a6d7d;
+    --brand-soft: #e4f4f6;
+    --surface-grad: radial-gradient(circle at 20% 20%, #f3fbfc 0%, #f7f7f5 40%, #f0f0ea 100%);
+}
+
+body {
+    background: var(--surface-grad);
+    min-height: 100vh;
+}
+
+.nav-blur {
+    backdrop-filter: blur(8px);
+    background: color-mix(in srgb, var(--bs-body-bg) 88%, transparent);
+}
+
+.navbar-brand {
+    color: var(--brand);
+}
+
+.stat-card {
+    border-top: 4px solid var(--brand);
+}
+
+.btn-primary,
+.bg-primary {
+    --bs-btn-bg: var(--brand);
+    --bs-btn-border-color: var(--brand);
+    --bs-btn-hover-bg: #095d6a;
+    --bs-btn-hover-border-color: #095d6a;
+}
+
+[data-bs-theme="dark"] body {
+    --surface-grad: radial-gradient(circle at 15% 20%, #1a2732 0%, #111827 45%, #0b1220 100%);
+}

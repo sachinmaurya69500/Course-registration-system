@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="h3 mb-0">Registrar Dashboard</h1>
+    <a href="{{ url_for('create_course') }}" class="btn btn-primary">Add Course</a>
+</div>
+
+<div class="row g-3 mb-4">
+    <div class="col-md-4">
+        <div class="card stat-card border-0 shadow-sm h-100">
+            <div class="card-body">
+                <h2 class="h6 text-uppercase text-secondary">Total Courses</h2>
+                <p class="display-6 fw-semibold mb-0">{{ total_courses }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card stat-card border-0 shadow-sm h-100">
+            <div class="card-body">
+                <h2 class="h6 text-uppercase text-secondary">Total Students</h2>
+                <p class="display-6 fw-semibold mb-0">{{ total_students }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card stat-card border-0 shadow-sm h-100">
+            <div class="card-body">
+                <h2 class="h6 text-uppercase text-secondary">Most Popular Course</h2>
+                {% if popular_course %}
+                    <p class="mb-1 fw-semibold">{{ popular_course.course_name }}</p>
+                    <p class="mb-0 text-secondary">{{ popular_course.course_code }} · {{ popular_course.enrolled_count }} enrolled</p>
+                {% else %}
+                    <p class="mb-0 text-secondary">No courses available.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card border-0 shadow-sm">
+    <div class="card-body">
+        <h2 class="h5">Course Management</h2>
+        <div class="table-responsive">
+            <table class="table align-middle">
+                <thead>
+                    <tr>
+                        <th>Code</th>
+                        <th>Name</th>
+                        <th>Instructor</th>
+                        <th>Department</th>
+                        <th>Credits</th>
+                        <th>Enrollment</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for course in courses %}
+                    <tr>
+                        <td>{{ course.course_code }}</td>
+                        <td>{{ course.course_name }}</td>
+                        <td>{{ course.instructor }}</td>
+                        <td>{{ course.department }}</td>
+                        <td>{{ course.credits }}</td>
+                        <td>{{ course.enrolled_count }} / {{ course.capacity }}</td>
+                        <td class="d-flex gap-2">
+                            <a class="btn btn-sm btn-outline-primary" href="{{ url_for('edit_course', course_id=course.id) }}">Edit</a>
+                            <a class="btn btn-sm btn-outline-info" href="{{ url_for('enrolled_students', course_id=course.id) }}">Students</a>
+                            <form method="post" action="{{ url_for('delete_course', course_id=course.id) }}" onsubmit="return confirm('Delete this course?');">
+                                <button class="btn btn-sm btn-outline-danger">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="7" class="text-center text-secondary py-4">No courses created yet.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
